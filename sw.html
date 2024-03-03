@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    .stopwatch {
+        margin-top: 50px;
+    }
+    #display {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="stopwatch">
+    <div id="display">00:00:00</div>
+    <button onclick="startStopwatch()">Start</button>
+    <button onclick="stopStopwatch()">Stop</button>
+    <button onclick="resetStopwatch()">Reset</button>
+</div>
+
+<script>
+    var stopwatchInterval;
+    var startTime;
+    var elapsedTime = 0;
+    var running = false;
+
+    function startStopwatch() {
+        if (!running) {
+            startTime = Date.now() - elapsedTime;
+            stopwatchInterval = setInterval(updateDisplay, 10);
+            running = true;
+        }
+    }
+
+    function stopStopwatch() {
+        if (running) {
+            clearInterval(stopwatchInterval);
+            running = false;
+        }
+    }
+
+    function resetStopwatch() {
+        clearInterval(stopwatchInterval);
+        elapsedTime = 0;
+        updateDisplay();
+        running = false;
+    }
+
+    function updateDisplay() {
+        var currentTime = Date.now();
+        elapsedTime = currentTime - startTime;
+        var minutes = Math.floor(elapsedTime / (60 * 1000));
+        var seconds = Math.floor((elapsedTime % (60 * 1000)) / 1000);
+        var milliseconds = Math.floor((elapsedTime % 1000) / 10);
+        document.getElementById('display').textContent = formatTime(minutes) + ':' + formatTime(seconds) + ':' + formatTime(milliseconds);
+    }
+
+    function formatTime(time) {
+        return time < 10 ? '0' + time : time;
+    }
+</script>
+
+</body>
+</html>
